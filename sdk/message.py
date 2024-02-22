@@ -10,6 +10,12 @@ def convert_message(msg) -> Tuple[str, Dict[str, any]]:
                 "sender_user_id": msg["sender"]["id"],
                 "message": msg_chain[1]["text"]
             }
+        else:
+            return "message.group.message", {
+                "group_id": msg["sender"]["group"]["id"],
+                "sender_user_id": msg["sender"]["id"],
+                "message": msg_chain[1:]
+            }
     print("Method Not Implmented")
     return "", {}
 
