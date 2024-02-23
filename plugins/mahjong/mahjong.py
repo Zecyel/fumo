@@ -16,9 +16,9 @@ def to_100(a: int) -> int:
         return a // 100 * 100 + 100
     return a
 
-def mahjong_handler(session: str, group_id: int, sender_user_id: int, message: str):
+async def mahjong_handler(session: str, group_id: int, sender_user_id: int, message: str):
     if message == "麻将 help":
-        send_group_message(session, group_id, text_message(hint))
+        await send_group_message(session, group_id, text_message(hint))
         return
     if message[:2] != "麻将":
         return
@@ -54,7 +54,7 @@ def mahjong_handler(session: str, group_id: int, sender_user_id: int, message: s
             zimo_zi = to_100(jibendian) + 100 * lianzhuang
             result = f"{ronghu}({zimo_zi}, {zimo_zhuang})"
 
-        send_group_message(session, group_id, text_message(result))
+        await send_group_message(session, group_id, text_message(result))
     except:
         return
 

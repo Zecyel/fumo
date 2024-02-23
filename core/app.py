@@ -4,7 +4,7 @@ import sdk.api as api
 from sdk.send_message import send_group_message
 from core.plugin import Plugin
 from typing import List
-import time
+import asyncio
 
 VERIFY_KEY = "1234567890"
 QQ = 3793571711
@@ -32,13 +32,42 @@ class App:
         self.plugin.append(plugin)
         plugin.session = self.session # will be modifyed later.
 
-    def run(self):
-        print(self.plugin)
+    # async def task(self, result):
+    #     msg = await recv_message(self.session)
+    #     print("got msg:", msg) # log system......
+    #     msg_type, args = convert_message(msg)
+    #     print("========", msg_type, args)
+    #     for plugin in self.plugin:
+    #         for task in plugin.handle(msg_type, **args):
+    #             print('get task', task)
+    #             result.append(task)
+
+    # async def run(self):
+    #     task = []
+    #     task_when_blocked = []
+    #     async def receiver(task):
+    #         await self.task(task)
+
+    #     while True:
+    #         task = task_when_blocked[:]
+    #         task_when_blocked = []
+    #         await self.task(task)
+    #         print(task)
+    #         await asyncio.gather(*task, receiver(task_when_blocked))
+    #         await asyncio.sleep(0.05)
+
+
+    async def run(self):
         while True:
-            msg = recv_message(self.session)
-            print("got msg:", msg)
+            task = []
+            
+            msg = await recv_message(self.session)
+            print("got msg:", msg) # log system......
             msg_type, args = convert_message(msg)
             print("========", msg_type, args)
+            
             for plugin in self.plugin:
-                plugin.handle(msg_type, **args)
-            time.sleep(0.05)
+                task = [*task, *plugin.handle(msg_type, **args)]
+            print(task)
+            await asyncio.gather(*task)
+            await asyncio.sleep(0.05)

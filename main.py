@@ -6,6 +6,8 @@ import plugins.happiness.happiness as happiness
 import plugins.battle.battle as battle
 import plugins.mahjong.mahjong as mahjong
 import plugins.answer.answer as answer
+import plugins.stopwatch.stopwatch as stopwatch
+import asyncio
 
 bot = App()
 
@@ -16,5 +18,6 @@ bot.register_plugin(happiness.happiness)
 bot.register_plugin(battle.battle)
 bot.register_plugin(mahjong.mahjong)
 bot.register_plugin(answer.answer)
+bot.register_plugin(stopwatch.stopwatch)
 
-bot.run()
+asyncio.run(bot.run())

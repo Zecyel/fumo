@@ -17,9 +17,11 @@ class Plugin:
         self.callback = []
 
     def handle(self, event_type: str, **kwargs):
+        task = []
         for i in self.callback:
             if i[0] == event_type:
-                i[1](self.session, **kwargs)
+                task.append(i[1](self.session, **kwargs))
+        return task
 
     def register_callback(self, event_type: str, handler: object):
         # handler don't have to be a function, as long as it can be executed.

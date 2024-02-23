@@ -1,19 +1,20 @@
 import sdk.api as api
 import time
 import queue
+import asyncio
 
 last_fetch = time.time()
 
 message_pool = queue.Queue()
 
-def recv_message(session: str): # may cause block
+async def recv_message(session: str): # may cause block
     global message_pool
     if not message_pool.empty():
         return message_pool.get()
     while True:
         global last_fetch
         if time.time() - last_fetch < 0.2:
-            time.sleep(0.2)
+            await asyncio.sleep(0.2)
         last_fetch = time.time()
         recv = api.get(f'/countMessage?sessionKey={session}')
         count = recv["data"]

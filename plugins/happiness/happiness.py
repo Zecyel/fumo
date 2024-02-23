@@ -22,9 +22,9 @@ saying = [
     "身边有公主让我感到轻松自在，就像终于摆脱了诅咒一样。"
 ]
 
-def happiness_handler(session: str, group_id: int, sender_user_id: int, message: str):
+async def happiness_handler(session: str, group_id: int, sender_user_id: int, message: str):
     if message == "快乐":
-        send_group_message(session, group_id, text_message(random.choice(saying)))
+        await send_group_message(session, group_id, text_message(random.choice(saying)))
 
 happiness = Plugin('httpcat')
 happiness.register_callback('message.group.text_message', happiness_handler)
