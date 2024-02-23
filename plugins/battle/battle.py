@@ -3,7 +3,7 @@ from sdk.message import text_message
 from sdk.user import user_group_nickname
 import random
 from core.plugin import Plugin
-from plugins.battle.army import army, death
+from plugins.battle.army import army, death, prefix
 
 async def battle_handler(session: str, group_id: int, sender_user_id: int, message):
     if len(message) == 3 and message[2]["type"] == "Plain" and message[2]["text"].strip() == "":
@@ -19,8 +19,8 @@ async def battle_handler(session: str, group_id: int, sender_user_id: int, messa
             await send_group_message(session, group_id, text_message(f"你个杂鱼，才不能和自己决斗呢"))
             return
 
-        army1 = random.choice(army)
-        army2 = random.choice(army)
+        army1 = random.choice(prefix) + " " + random.choice(army)
+        army2 = random.choice(prefix) + " " + random.choice(army)
 
         await send_group_message(session, group_id, text_message(f"{player1} 与 {player2} 的决斗开始！"))
         await send_group_message(session, group_id, text_message(f"{player1} 使用了 {army1}"))
