@@ -4,6 +4,7 @@ import sdk.api as api
 from sdk.send_message import send_group_message
 from core.plugin import Plugin
 from typing import List
+import time
 
 VERIFY_KEY = "1234567890"
 QQ = 3793571711
@@ -40,3 +41,4 @@ class App:
             print("========", msg_type, args)
             for plugin in self.plugin:
                 plugin.handle(msg_type, **args)
+            time.sleep(0.05)

@@ -12,8 +12,8 @@ def recv_message(session: str): # may cause block
         return message_pool.get()
     while True:
         global last_fetch
-        if time.time() - last_fetch < 0.1:
-            continue
+        if time.time() - last_fetch < 0.2:
+            time.sleep(0.2)
         last_fetch = time.time()
         recv = api.get(f'/countMessage?sessionKey={session}')
         count = recv["data"]
