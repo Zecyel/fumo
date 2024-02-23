@@ -4,7 +4,6 @@ import queue
 import asyncio
 
 last_fetch = time.time()
-
 message_pool = queue.Queue()
 
 async def recv_message(session: str): # may cause block
