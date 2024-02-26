@@ -29,22 +29,23 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
     fan = message[0]
     if fan > 78:
         await send_group_message(session, group_id, text_message("开了是吧？😡"))
-        return
-    
+        # return
+
     if fan < 5:
         fu = message[1]
     else:
-        fu = 1000 
+        fu = 1000
     lianzhuang = 0
     if len(message) == 3:
         lianzhuang = message[2]
-    jibendian = fu * 2 ** (2 + fan)
-    if jibendian >= 2000:
-        if fan == 5: jibendian = 2000
-        if fan in [6, 7]: jibendian = 3000
-        if fan in [8, 9, 10]: jibendian = 4000
-        if fan in [11, 12]: jibendian = 6000
-        if fan >= 13: jibendian = fan // 13 * 8000
+
+    if fan <= 4: jibendian = min(fu * 2 ** (2 + fan), 2000)
+    elif fan == 5: jibendian = 2000
+    elif fan in [6, 7]: jibendian = 3000
+    elif fan in [8, 9, 10]: jibendian = 4000
+    elif fan in [11, 12]: jibendian = 6000
+    elif fan >= 13: jibendian = fan // 13 * 8000
+
     if zhuangjia:
         ronghu = to_100(6 * jibendian) + 300 * lianzhuang
         zimo = to_100(2 * jibendian) + 100 * lianzhuang
