@@ -28,10 +28,6 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
     if data == None:
         await send_group_message(session, group_id, text_message("请发送“猜npc”来开始游戏"))
         return
-    
-    if message == "答案之书":
-        await send_group_message(session, group_id, text_message(data["npc"]))
-        return
 
     if message == "结束游戏":
         await send_group_message(session, group_id, text_message(f"游戏结束，答案是：{data['npc']}"))
@@ -47,7 +43,7 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
         return
 
 def checker(group_id: int, sender_user_id: int, message: str):
-    return message in ["猜npc", "结束游戏", "答案之书"] or message in npc_name
+    return message in ["猜npc", "结束游戏"] or message in npc_name
 
 guess_npc = Plugin('guess_npc')
 guess_npc.register_callback('message.group.text_message', handler, checker)

@@ -3,9 +3,14 @@ from sdk.message import text_message
 import random
 from core.plugin import Plugin
 from plugins.answer.book import answer_book
+from sdk.temp_data import fetch
 
 async def handler(session: str, group_id: int, sender_user_id: int, message: str):
-    await send_group_message(session, group_id, text_message(random.choice(answer_book)))
+    data = fetch(f'guess_npc_{group_id}')
+    if data != None:
+        await send_group_message(session, group_id, text_message(data['npc']))
+    else:
+        await send_group_message(session, group_id, text_message(random.choice(answer_book)))
 
 def checker(group_id: int, sender_user_id: int, message: str):
     return message == "答案之书"
