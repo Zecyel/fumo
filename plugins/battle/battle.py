@@ -34,6 +34,5 @@ async def battle_handler(session: str, group_id: int, sender_user_id: int, messa
 
         await send_group_message(session, group_id, text_message(f"{player1} {hint}，凶手是 {player2} 的 {army2}。"))
         
-
 battle = Plugin('battle')
 battle.register_callback('message.group.message', battle_handler)

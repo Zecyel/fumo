@@ -1,10 +1,14 @@
-from typing import List, Dict, Union, Tuple
+from typing import List, Dict, Union, Tuple, Callable
+import collections
+
 import json
+
+Callback = collections.namedtuple("Callback", ["event_type", "fn", "checker"])
 
 class Plugin:
     name: str
     # scope: Dict[str, Union[List[int], str]] # str must be "all"
-    callback: List[Tuple[str, object]]
+    callback: List[Callback]
 
     session: str # will be set by app for safety
 
@@ -19,11 +23,17 @@ class Plugin:
     def handle(self, event_type: str, **kwargs):
         task = []
         for i in self.callback:
-            if i[0] == event_type:
-                task.append(i[1](self.session, **kwargs))
+            if i.event_type == event_type:
+                try:
+                    if i.checker(**kwargs):
+                        task.append(i.fn(self.session, **kwargs))
+                except:
+                    # save it into log
+                    print(f"{self.name} failed to handle {event_type}")
+                    pass
         return task
 
-    def register_callback(self, event_type: str, handler: object):
+    def register_callback(self, event_type: str, handler: Callable, checker: Callable = lambda *args,  **kwargs: True):
         # handler don't have to be a function, as long as it can be executed.
-        self.callback.append((event_type, handler))
+        self.callback.append(Callback(event_type, handler, checker))
     
