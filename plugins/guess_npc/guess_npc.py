@@ -25,13 +25,16 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
         await send_group_message(session, group_id, text_message(saying))
         return
     data = fetch(key)
-    if data == None:
-        await send_group_message(session, group_id, text_message("请发送“猜npc”来开始游戏"))
-        return
 
     if message == "结束游戏":
+        if data == None:
+            return
         await send_group_message(session, group_id, text_message(f"游戏结束，答案是：{data['npc']}"))
         dump(key)
+        return
+    
+    if data == None:
+        await send_group_message(session, group_id, text_message("请发送“猜npc”来开始游戏"))
         return
     
     if message == data["npc"]:
