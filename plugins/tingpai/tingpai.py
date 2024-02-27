@@ -8,7 +8,7 @@ from sdk.temp_data import alloc, fetch, dump
 def hupai(pai: List[int]) -> bool:
     if sum(pai) == 0:
         return True
-    if sum(pai) == 14:
+    if sum(pai) % 3 == 2:
         for i in range(1, 10):
             if pai[i] >= 2:
                 new_pai = pai[:]
@@ -42,28 +42,34 @@ def ting(pai: List[int]) -> List[int]:
                 ret.append(i)
     return ret
 
-def make_exercise() -> Tuple[List[int], List[int]]:
+def make_exercise(difficulty: int = 1, num: int = 13) -> Tuple[List[int], List[int]]:
     a = list(range(1, 10)) * 4
     while True:
         random.shuffle(a)
         count = [0] * 10
-        for i in range(13):
+        for i in range(num):
             count[a[i]] += 1
         tp = ting(count)
-        if tp != []:
-            return sorted(a[:13]), tp
+        if len(tp) >= difficulty:
+            return sorted(a[:num]), tp
 
 def to_message(pai: List[int]) -> str:
     return "".join(map(str, pai))
 
 async def handler(session: str, group_id: int, sender_user_id: int, message: str):
     key = f"qing_yi_se_{group_id}"
-    if message == "清一色":
+    if message in ["清一色", "清一色hard", "清一色superhard"]:
         if fetch(key) != None:
             await send_group_message(session, group_id, text_message("请先猜对当前听牌，或输入“结束游戏”"))
             return
         
-        exercise, answer = make_exercise()
+        if message == "清一色":
+            exercise, answer = make_exercise()
+        elif message == "清一色hard":
+            exercise, answer = make_exercise(4)
+        elif message == "清一色superhard":
+            exercise, answer = make_exercise(4, 16)
+
         alloc(key, {
             "exercise": exercise,
             "answer": answer
@@ -81,15 +87,15 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
         return
     
     if message == to_message(data['answer']):
-        await send_group_message(session, group_id, text_message(f"猜对咯，答案是{to_message(data['answer'])}！"))
+        await send_group_message(session, group_id, text_message(f"答对咯，答案是{to_message(data['answer'])}！"))
         dump(key)
         return
     else:
-        await send_group_message(session, group_id, text_message(f"猜错了，继续猜吧！"))
+        await send_group_message(session, group_id, text_message(f"回答错了喵，请继续回答喵~"))
         return
 
 def checker(group_id: int, sender_user_id: int, message: str):
-    return message in ["清一色", "结束游戏"] or all([i in "123456789" for i in message])
+    return message in ["清一色", "结束游戏", "清一色hard", "清一色superhard"] or all([i in "123456789" for i in message])
 
 tingpai = Plugin('tingpai')
 tingpai.register_callback('message.group.text_message', handler, checker)
