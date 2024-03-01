@@ -17,7 +17,7 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
     pass
 
 guess = Plugin('guess')
-guess.register_callback('message.group.text_message', handler)
+guess.register_callback('group.text_message', handler)
 ```
 
 ### 2. 理解消息处理函数
@@ -25,7 +25,7 @@ guess.register_callback('message.group.text_message', handler)
 注意这一行代码：
 
 ```python
-guess.register_callback('message.group.text_message', handler)
+guess.register_callback('group.text_message', handler)
 ```
 
 这行代码表示当收到群的**纯文本消息**时，调用`handler`函数进行处理。
@@ -63,7 +63,7 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
             await send_group_message(session, group_id, text_message("爪巴"))
 
 pat = Plugin('pat')
-pat.register_callback('message.group.text_message', handler)
+pat.register_callback('group.text_message', handler)
 ```
 
 ### 4. 数据持久化
@@ -176,5 +176,5 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
         return
 
 guess_npc = Plugin('guess_npc')
-guess_npc.register_callback('message.group.text_message', handler)
+guess_npc.register_callback('group.text_message', handler)
 ```

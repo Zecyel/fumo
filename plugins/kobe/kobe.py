@@ -12,4 +12,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message == '我有意见' or message == '我没意见'
 
 kobe = Plugin('kobe')
-kobe.register_callback('message.group.text_message', handler, checker)
+kobe.register_callback('group.text_message', handler, checker)

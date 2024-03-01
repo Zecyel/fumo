@@ -16,4 +16,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message == "答案之书"
 
 answer = Plugin('answer')
-answer.register_callback('message.group.text_message', handler, checker)
+answer.register_callback('group.text_message', handler, checker)

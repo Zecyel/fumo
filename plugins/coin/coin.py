@@ -16,4 +16,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message in ["给我金币", "查询金币", "爆点金币"]
 
 coin = Plugin('coin')
-coin.register_callback('message.group.text_message', handler, checker)
+coin.register_callback('group.text_message', handler, checker)

@@ -29,4 +29,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message == "快乐"
 
 happiness = Plugin('httpcat')
-happiness.register_callback('message.group.text_message', handler, checker)
+happiness.register_callback('group.text_message', handler, checker)

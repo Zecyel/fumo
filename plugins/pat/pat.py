@@ -13,4 +13,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message[:2] == "摸摸"
 
 pat = Plugin('pat')
-pat.register_callback('message.group.text_message', handler, checker)
+pat.register_callback('group.text_message', handler, checker)

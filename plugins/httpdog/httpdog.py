@@ -15,4 +15,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message[:3] == "dog"
 
 httpdog = Plugin('httpdog')
-httpdog.register_callback('message.group.text_message', handler, checker)
+httpdog.register_callback('group.text_message', handler, checker)

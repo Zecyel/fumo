@@ -1,12 +1,9 @@
 import time
 
-class StopWatch:
-    start_time: float
-    seconds: float
-
-    def __init__(self, seconds: float):
-        self.start_time = time.time()
-        self.seconds = seconds
-
+class Timer:
+    scheduled_time: float
+    def __init__(self, delay: float): # in seconds
+        self.scheduled_time = time.time() + delay
+    
     def check(self) -> bool:
-        return time.time() >= start_time + seconds
+        return time.time() > self.scheduled_time

@@ -1,3 +1,5 @@
+from random import choice
+
 temp_data = {}
 
 def alloc(key: str, value: object):
@@ -10,3 +12,6 @@ def fetch(key: str) -> object:
 
 def dump(key: str):
     del temp_data[key]
+
+def random_key() -> str:
+    return "".join([choice("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") for i in range(8)])

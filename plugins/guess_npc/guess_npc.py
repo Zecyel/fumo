@@ -49,4 +49,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message in ["猜npc", "结束游戏"] or message in npc_name
 
 guess_npc = Plugin('guess_npc')
-guess_npc.register_callback('message.group.text_message', handler, checker)
+guess_npc.register_callback('group.text_message', handler, checker)

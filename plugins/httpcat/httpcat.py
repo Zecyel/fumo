@@ -15,4 +15,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message[:3] == "cat"
 
 httpcat = Plugin('httpcat')
-httpcat.register_callback('message.group.text_message', handler, checker)
+httpcat.register_callback('group.text_message', handler, checker)

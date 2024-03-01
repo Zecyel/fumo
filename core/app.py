@@ -16,7 +16,7 @@ class App:
 
     plugin: List[Plugin]
     session: str
-    message_queue: Queue
+    task_queue: Queue
 
     def __init__(self):
         verification = api.post('/verify', {
@@ -30,37 +30,11 @@ class App:
         })
 
         self.plugin = []
-        self.message_queue = Queue()
-
+        self.task_queue = Queue()
 
     def register_plugin(self, plugin):
         self.plugin.append(plugin)
-        plugin.session = self.session # will be modifyed later.
-
-    # async def task(self, result):
-    #     msg = await recv_message(self.session)
-
-    #     result.clear()
-
-    #     print("got msg:", msg) # log system......
-    #     msg_type, args = convert_message(msg)
-    #     print("========", msg_type, args)
-    #     for plugin in self.plugin:
-    #         for task in plugin.handle(msg_type, **args):
-    #             print('get task', task)
-    #             result.append(task)
-
-    async def fetch_message(self):
-        print("Thread started.")
-        while True:
-            msg = await recv_message(self.session)
-            msg_type, args = convert_message(msg)
-            for plugin in self.plugin:
-                for task in plugin.handle(msg_type, **args):
-                    # print('get task', task)
-                    self.message_queue.put(task)
-            await asyncio.sleep(0.05)
-            
+        plugin.session = self.session # will be modified later.
 
     def handle_task(self, task):
         try:
@@ -69,15 +43,36 @@ class App:
             loop = asyncio.get_event_loop()
             loop.run_until_complete(task)
             loop.close()
-        except:
-            print("Error in handle_task", task)
+        except Exception as e:
+            print("Error in handle_message_task", task, e)
             pass
             # save it into log
+    
+    async def message_loop(self):
+        print("<Message loop>: Thread started.")
+        while True:
+            msg = await recv_message(self.session)
+            msg_type, args = convert_message(msg)
+            for plugin in self.plugin:
+                for task in plugin.handle_message(msg_type, **args):
+                    # print('get task', task)
+                    self.task_queue.put(task)
+            await asyncio.sleep(0.05)
+
+    async def timer_loop(self):
+        print("<Timer loop>: Thread started.")
+        while True:
+            for plugin in self.plugin:
+                for task in plugin.handle_timer():
+                    # print('get task', task)
+                    self.task_queue.put(task)
+            await asyncio.sleep(0.05)
 
     def run(self):
-        Thread(target=lambda: asyncio.run(self.fetch_message()), name="fetch_message_loop").start()
+        Thread(target=lambda: asyncio.run(self.message_loop()), name="message_loop").start()
+        Thread(target=lambda: asyncio.run(self.timer_loop()), name="timer_loop").start()
 
         while True:
-            if not self.message_queue.empty():
-                Thread(target=lambda: self.handle_task(self.message_queue.get()), name="handle_task").start()
+            if not self.task_queue.empty():
+                Thread(target=lambda: self.handle_task(self.task_queue.get()), name="handle_message_task").start()
             time.sleep(0.05)

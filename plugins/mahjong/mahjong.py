@@ -25,7 +25,7 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
     if message[0] in "ny":
         zhuangjia = message[0] == 'y'
         message = message[1:]
-    message = list(map(int, message.split('/')))
+    message = list(map(int, split('/')))
     fan = message[0]
     if fan > 78:
         await send_group_message(session, group_id, text_message("开了是吧？😡"))
@@ -61,4 +61,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message[:2] == "麻将"
 
 mahjong = Plugin('mahjong')
-mahjong.register_callback('message.group.text_message', handler, checker)
+mahjong.register_callback('group.text_message', handler, checker)

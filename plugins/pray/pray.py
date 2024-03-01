@@ -33,4 +33,4 @@ def checker(group_id: int, sender_user_id: int, message: str):
     return message in ["许愿", "许愿箱"]
 
 pray = Plugin('pray')
-pray.register_callback('message.group.text_message', handler, checker)
+pray.register_callback('group.text_message', handler, checker)
