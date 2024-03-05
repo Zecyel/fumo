@@ -11,7 +11,8 @@ def fetch(key: str) -> object:
     return temp_data[key]
 
 def dump(key: str):
-    del temp_data[key]
+    if key in temp_data:
+        del temp_data[key]
 
 def random_key() -> str:
     return "".join([choice("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") for i in range(8)])

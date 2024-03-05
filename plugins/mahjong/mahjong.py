@@ -25,7 +25,7 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
     if message[0] in "ny":
         zhuangjia = message[0] == 'y'
         message = message[1:]
-    message = list(map(int, split('/')))
+    message = list(map(int, message.split('/')))
     fan = message[0]
     if fan > 78:
         await send_group_message(session, group_id, text_message("开了是吧？😡"))
