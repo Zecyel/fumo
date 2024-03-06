@@ -8,9 +8,7 @@ import asyncio
 from queue import Queue
 from threading import Thread
 import time
-
-VERIFY_KEY = "1234567890"
-QQ = 3793571711
+from config import VERIFY_KEY, QQ
 
 class App:
 
@@ -51,13 +49,16 @@ class App:
     async def message_loop(self):
         print("<Message loop>: Thread started.")
         while True:
-            msg = await recv_message(self.session)
-            msg_type, args = convert_message(msg)
-            for plugin in self.plugin:
-                for task in plugin.handle_message(msg_type, **args):
-                    # print('get task', task)
-                    self.task_queue.put(task)
-            await asyncio.sleep(0.05)
+            try:
+                msg = await recv_message(self.session)
+                for msg_type, args in convert_message(msg).items():
+                    for plugin in self.plugin:
+                        for task in plugin.handle_message(msg_type, **args):
+                            # print('get task', task)
+                            self.task_queue.put(task)
+                await asyncio.sleep(0.05)
+            except:
+                pass
 
     async def timer_loop(self):
         print("<Timer loop>: Thread started.")

@@ -53,3 +53,11 @@ class Plugin:
     
     def register_timer(self, timer: Timer, callback: Callable, *args, **kwargs):
         self.timer_callback.append(TimerCallback(timer, callback, args, kwargs))
+
+def compoundChecker(*checkers: List[Callable]):
+    def foo(*args, **kwargs):
+        for checker in checkers:
+            if not checker(*args, **kwargs):
+                return False
+        return True
+    return foo

@@ -1,7 +1,6 @@
 import requests, json
+from config import IP, PORT
 
-IP = "127.0.0.1"
-PORT = 8096
 prefix = f'http://{IP}:{PORT}'
 
 def post(url, body):
