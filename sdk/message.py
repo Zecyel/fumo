@@ -1,4 +1,5 @@
 from typing import Dict, List, Union
+from config import QQ
 
 mapper = {
     "Source": "DUMMY",
@@ -23,11 +24,12 @@ def parse_message_chain(msg_chain: List[Dict[str, any]]) -> Union[str, List[any]
             continue
         
         format += mapper[msg_segment["type"]]
+
         if msg_segment["type"] == "Plain":
             data.append(msg_segment["text"].strip())
         elif msg_segment["type"] == "Quote":
             data.append({
-                "msg_id": msg_segment["id"],
+                "message_id": msg_segment["id"],
                 "from": {
                     "group_id": msg_segment["groupId"],
                     "sender_id": msg_segment["senderId"]
@@ -38,6 +40,8 @@ def parse_message_chain(msg_chain: List[Dict[str, any]]) -> Union[str, List[any]
             })
         elif msg_segment["type"] == "At":
             data.append(msg_segment["target"])
+            if msg_segment["target"] == QQ:
+                format += "fumo" # @fumo
         elif msg_segment["type"] == "AtAll":
             data.append(None)
         elif msg_segment["type"] == "Image":
@@ -51,6 +55,9 @@ def parse_message_chain(msg_chain: List[Dict[str, any]]) -> Union[str, List[any]
     return format, data
 
 def convert_message(msg) -> Dict[str, Dict[str, any]]:
+    if not "messageChain" in msg:
+        return {}
+    
     message_chain = msg["messageChain"]
     format, data = parse_message_chain(message_chain)
 
@@ -76,4 +83,10 @@ def text_message(msg: str) -> Dict[str, str]:
     return {
         "type": "Plain",
         "text": msg
+    }
+
+def img_message(msg: str) -> Dict[str, str]:
+    return {
+        "type": "Image",
+        "url": msg
     }
