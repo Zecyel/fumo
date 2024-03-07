@@ -43,7 +43,8 @@ class App:
             loop.close()
         except Exception as e:
             print("Error in handle_message_task", task, e)
-            pass
+            import traceback
+            traceback.print_exc()
             # save it into log
     
     async def message_loop(self):
@@ -58,7 +59,9 @@ class App:
                             self.task_queue.put(task)
                 await asyncio.sleep(0.05)
             except:
-                pass
+                # print the traceback
+                import traceback
+                traceback.print_exc()
 
     async def timer_loop(self):
         print("<Timer loop>: Thread started.")

@@ -28,7 +28,9 @@ class Plugin:
                 except:
                     # save it into log
                     print(f"{self.name} failed to handle {event_type}")
-                    pass
+                    
+                    import traceback
+                    traceback.print_exc()
         
         return task
 
