@@ -15,8 +15,8 @@ def to_100(a: int) -> int:
         return a // 100 * 100 + 100
     return a
 
-async def handler(session: str, group_id: int, sender_user_id: int, message: str):
-    message = message[2:].strip()
+async def handler(session: str, group_id: int, sender_id: int, message):
+    message = message[1][2:].strip()
     if message == "help":
         await send_group_message(session, group_id, text_message(hint))
         return
@@ -57,8 +57,8 @@ async def handler(session: str, group_id: int, sender_user_id: int, message: str
         result = f"{ronghu}({zimo_zi}, {zimo_zhuang})"
     await send_group_message(session, group_id, text_message(result))
 
-def checker(group_id: int, sender_user_id: int, message: str):
-    return message[:2] == "麻将"
+def checker(group_id: int, sender_id: int, message):
+    return message[1][:2] == "麻将"
 
 mahjong = Plugin('mahjong')
-mahjong.register_callback('group.text_message', handler, checker)
+mahjong.register_callback('group.@fumoP', handler, checker)

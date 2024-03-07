@@ -58,60 +58,65 @@ def make_exercise(difficulty: int = 1, num: int = 13) -> Tuple[List[int], List[i
 def to_message(pai: List[int]) -> str:
     return "".join(map(str, pai))
 
-async def handler(session: str, group_id: int, sender_user_id: int, message: str):
+async def handler(session: str, group_id: int, sender_id: int, message):
     key = f"tingpai_{group_id}"
-    if message in ["清一色", "清一色hard", "清一色superhard", "清一色extrahard"]:
-        if fetch(key) != None:
-            await send_group_message(session, group_id, text_message("请先猜对当前听牌，或输入“结束游戏”"))
-            return
-        
-        if message == "清一色":
-            exercise, answer = make_exercise()
-        elif message == "清一色hard":
-            exercise, answer = make_exercise(4)
-        elif message == "清一色superhard":
-            exercise, answer = make_exercise(4, 16)
-        elif message == "清一色extrahard":
-            exercise, answer = make_exercise(5, 19)
-
-        game_key = random_key()
-
-        alloc(key, {
-            "exercise": exercise,
-            "answer": answer,
-            "key": game_key
-        })
-        await send_group_message(session, group_id, text_message(f"{to_message(exercise)} 听牌是？"))
-
-        tingpai.register_timer(Timer(10), no_answer, session, group_id, game_key)
-        return
     
     data = fetch(key)
-    if data == None:
-        return
+    assert data != None
 
-    if message == "结束游戏":
+    if message[0] == "结束游戏":
         await send_group_message(session, group_id, text_message(f"游戏结束，答案是：{to_message(data['answer'])}"))
         dump(key)
         return
     
-    if message == to_message(data['answer']):
-        await send_group_message(session, group_id, text_message(f"答对咯，答案是{to_message(data['answer'])}！"))
+    if message[0] == to_message(data['answer']):
+        await send_group_message(session, group_id, text_message(f"答对咯，答案是 {to_message(data['answer'])}！"))
         dump(key)
         return
     else:
         await send_group_message(session, group_id, text_message(f"回答错了喵，请继续回答喵~"))
         return
 
-async def no_answer(session: str, group_id: int, key: str):
+async def no_reply(session: str, group_id: int, key: str):
     data = fetch(f"tingpai_{group_id}")
     if data == None or data["key"] != key:
         return
     await send_group_message(session, group_id, text_message(f"游戏超时结束，答案是：{to_message(data['answer'])}"))
     dump(f"tingpai_{group_id}")
 
-def checker(group_id: int, sender_user_id: int, message: str):
-    return message in ["清一色", "结束游戏", "清一色hard", "清一色superhard", "清一色extrahard"] or all([i in "123456789" for i in message])
+def checker(group_id: int, sender_id: int, message):
+    return message[0] == "结束游戏" or all([i in "123456789" for i in message[0]])
+
+async def startup_handler(session: str, group_id: int, sender_id: int, message):
+    key = f"tingpai_{group_id}"
+    
+    if fetch(key) != None:
+        await send_group_message(session, group_id, text_message("请先猜对当前听牌，或输入“结束游戏”"))
+        return
+
+    if message[1] == "清一色":
+        exercise, answer = make_exercise()
+    elif message[1] == "清一色hard":
+        exercise, answer = make_exercise(4)
+    elif message[1] == "清一色superhard":
+        exercise, answer = make_exercise(4, 16)
+    elif message[1] == "清一色extrahard":
+        exercise, answer = make_exercise(5, 19)
+
+    game_key = random_key()
+
+    alloc(key, {
+        "exercise": exercise,
+        "answer": answer,
+        "key": game_key
+    })
+
+    await send_group_message(session, group_id, text_message(f"{to_message(exercise)} 听牌是？"))
+    tingpai.register_timer(Timer(10), no_reply, session, group_id, game_key)
+
+def startup_checker(group_id: int, sender_id: int, message):
+    return message[1] in ["清一色", "清一色hard", "清一色superhard", "清一色extrahard"]
 
 tingpai = Plugin('tingpai')
-tingpai.register_callback('group.text_message', handler, checker)
+tingpai.register_callback('group.@fumoP', startup_handler, startup_checker)
+tingpai.register_callback('group.P', handler, checker)

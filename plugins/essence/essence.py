@@ -4,6 +4,7 @@ from core.plugin import Plugin
 from sdk.manage import set_essence
 
 async def handler(session: str, group_id: int, sender_id: int, message):
+    print("Entered")
     await set_essence(session, message[0]["message_id"], group_id)
     await send_group_message(session, group_id, text_message("已设精"))
 

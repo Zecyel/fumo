@@ -53,6 +53,7 @@ class App:
             try:
                 msg = await recv_message(self.session)
                 for msg_type, args in convert_message(msg).items():
+                    print("Get Message:", msg_type)
                     for plugin in self.plugin:
                         for task in plugin.handle_message(msg_type, **args):
                             # print('get task', task)

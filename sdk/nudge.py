@@ -7,4 +7,3 @@ async def group_nudge(session: str, group_id: int, user_id: int):
         "subject": group_id,
         "kind": "Group"
     })
-    pass
