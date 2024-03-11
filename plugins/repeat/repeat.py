@@ -10,15 +10,18 @@ async def handler(session: str, group_id: int, sender_id: int, message):
     data = fetch(key)
     if data == None:
         alloc(key, {
-            'msg': message[0]
+            'msg': message[0],
+            'repeated': False
         })
         return
     
     if data['msg'] == message[0]:
-        await send_group_message(session, group_id, text_message(f"{message[0]}"))
-        dump(key)
+        if data['repeated'] == False:
+            await send_group_message(session, group_id, text_message(f"{message[0]}"))
+            data['repeated'] = True
     else:
         data['msg'] = message[0]
+        data['repeated'] = False
 
 repeat = Plugin('repeat')
 repeat.register_callback('group.P', handler)
