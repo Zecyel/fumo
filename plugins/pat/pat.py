@@ -1,9 +1,14 @@
 from sdk.send_message import send_group_message, send_friend_message
 from sdk.message import text_message
 from core.plugin import Plugin
+import random
 
 privileged_user = [2530469979, 158291705]
 async def handler(session: str, group_id: int, sender_id: int, message):
+    if random.random() > 0.8:
+        await send_group_message(session, group_id, text_message("( *・ω・)✄╰ひ╯"))
+        return
+
     if sender_id in privileged_user:
         await send_group_message(session, group_id, text_message("主人喵~"))
     else:
