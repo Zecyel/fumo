@@ -12,7 +12,7 @@ from plugins.guess_npc.guess_npc import guess_npc
 from plugins.tingpai.tingpai import tingpai
 from plugins.coin.coin import coin
 # from plugins.pray.pray import pray
-# from plugins.repeat.repeat import repeat
+from plugins.repeat.repeat import repeat
 from plugins.score.score import score
 from plugins.essence.essence import essence
 from plugins.nudge.nudge import nudge
@@ -31,7 +31,7 @@ bot.register_plugin(guess_npc)
 bot.register_plugin(tingpai)
 bot.register_plugin(coin)
 # bot.register_plugin(pray)
-# bot.register_plugin(repeat)
+bot.register_plugin(repeat)
 bot.register_plugin(score)
 bot.register_plugin(essence)
 bot.register_plugin(nudge)
