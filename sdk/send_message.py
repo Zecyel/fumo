@@ -16,7 +16,6 @@ async def send_group_message(session: str, group_id: int, *message_chain):
     # fire will be implemented later
 
     data = fetch(f"repeat_{group_id}")
-    print(data, message_chain)
     if data != None and len(message_chain) > 0 and "text" in message_chain[0] and message_chain[0]["text"] != data['msg']:
         dump(f"repeat_{group_id}")
         print('dumped')

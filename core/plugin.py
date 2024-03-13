@@ -1,7 +1,10 @@
 from typing import List, Callable
 import collections
 from sdk.timer import Timer
-import json
+from sdk.log import logger
+import traceback
+
+plugin_logger = logger("runtime", "Plugin")
 
 MessageCallback = collections.namedtuple("MessageCallback", ["event_type", "fn", "checker"])
 TimerCallback = collections.namedtuple("TimerCallback", ["timer", "fn", "args", "kwargs"])
@@ -26,11 +29,7 @@ class Plugin:
                     if i.checker(**kwargs):
                         task.append(i.fn(self.session, **kwargs))
                 except:
-                    # save it into log
-                    print(f"{self.name} failed to handle {event_type}")
-                    
-                    import traceback
-                    traceback.print_exc()
+                    plugin_logger["error"](f"{self.name} failed to handle {event_type}. Traceback:\n{traceback.format_exc()}")
         
         return task
 

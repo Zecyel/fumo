@@ -2,13 +2,17 @@ from sdk.recv_message import recv_message
 from sdk.message import convert_message
 import sdk.api as api
 from sdk.send_message import send_group_message
+from sdk.log import logger
 from core.plugin import Plugin
 from typing import List
 import asyncio
 from queue import Queue
 from threading import Thread
 import time
+import traceback
 from config import VERIFY_KEY, QQ
+
+app_logger = logger("runtime", "App")
 
 class App:
 
@@ -42,34 +46,27 @@ class App:
             loop.run_until_complete(task)
             loop.close()
         except Exception as e:
-            print("Error in handle_message_task", task, e)
-            import traceback
-            traceback.print_exc()
-            # save it into log
+            app_logger["error"](f"Message task failed. Traceback: \n{traceback.format_exc()}")
     
     async def message_loop(self):
         print("<Message loop>: Thread started.")
         while True:
             try:
                 msg = await recv_message(self.session)
+                app_logger["info"](f"Get Message: {msg}")
                 for msg_type, args in convert_message(msg).items():
-                    print("Get Message:", msg_type)
                     for plugin in self.plugin:
                         for task in plugin.handle_message(msg_type, **args):
-                            # print('get task', task)
                             self.task_queue.put(task)
                 await asyncio.sleep(0.05)
             except:
-                # print the traceback
-                import traceback
-                traceback.print_exc()
+                app_logger["error"](f"Message loop failed. Traceback: \n{traceback.format_exc()}")
 
     async def timer_loop(self):
         print("<Timer loop>: Thread started.")
         while True:
             for plugin in self.plugin:
                 for task in plugin.handle_timer():
-                    # print('get task', task)
                     self.task_queue.put(task)
             await asyncio.sleep(0.05)
 
