@@ -9,4 +9,5 @@ VERIFY_KEY = "HarD2GueSsSTr1nG" # the verify key mirai2 uses
 QQ = 1234567890 # the qq of the robot
 
 URL_PREFIX = "http://127.0.0.1:8096"
+API_KEY = "fumofumofumofumo" # the api key of chatgpt
 ```
