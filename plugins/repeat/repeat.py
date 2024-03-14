@@ -5,7 +5,7 @@ from core.plugin import Plugin
 import asyncio
 
 async def handler(session: str, group_id: int, sender_id: int, message):
-    asyncio.sleep(0.5)
+    await asyncio.sleep(0.5)
     key = f"repeat_{group_id}"
     data = fetch(key)
     if data == None:

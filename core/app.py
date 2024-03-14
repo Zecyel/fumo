@@ -54,10 +54,14 @@ class App:
             try:
                 msg = await recv_message(self.session)
                 app_logger["info"](f"Get Message: {msg}")
-                for msg_type, args in convert_message(msg).items():
-                    for plugin in self.plugin:
-                        for task in plugin.handle_message(msg_type, **args):
-                            self.task_queue.put(task)
+                msg_type, kwargs = convert_message(msg)
+                
+                if msg_type == "":
+                    continue
+
+                for plugin in self.plugin:
+                    for task in plugin.handle_message(msg_type, **kwargs):
+                        self.task_queue.put(task)
                 await asyncio.sleep(0.05)
             except:
                 app_logger["error"](f"Message loop failed. Traceback: \n{traceback.format_exc()}")

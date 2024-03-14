@@ -8,7 +8,6 @@ async def handler(session: str, group_id: int, sender_id: int, message):
         await group_nudge(session, group_id, sender_id)
     if message[1] == "戳所有人" and sender_id == 2530469979:
         user_list = group_user_list(session, group_id)
-        print(user_list)
         for user in user_list:
             await group_nudge(session, group_id, user)
 

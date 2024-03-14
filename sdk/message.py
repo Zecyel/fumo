@@ -1,5 +1,6 @@
 from typing import Dict, List, Union
 from config import QQ
+from sdk.history import message_from_id
 
 mapper = {
     "Source": "DUMMY",
@@ -54,30 +55,28 @@ def parse_message_chain(msg_chain: List[Dict[str, any]]) -> Union[str, List[any]
             
     return format, data
 
-def convert_message(msg) -> Dict[str, Dict[str, any]]:
+def convert_message(msg) -> Union[str, dict]:
     if not "messageChain" in msg:
-        return {}
+        return "", {}
     
     message_chain = msg["messageChain"]
     format, data = parse_message_chain(message_chain)
 
     if msg["type"] == "GroupMessage":
-        return {
-            f"group.{format}": {
-                "group_id": msg["sender"]["group"]["id"],
-                "sender_id": msg["sender"]["id"],
-                "message": data
-            }
+        return f"group.{format}", {
+            "group_id": msg["sender"]["group"]["id"],
+            "sender_id": msg["sender"]["id"],
+            "message": data
+            # "message_id": msg["messageChain"][0]["id"]
         }
     elif msg["type"] == "FriendMessage":
-        return {
-            f"friend.{format}": {
-                "sender_id": msg["sender"]["id"],
-                "message": data
-            }
+        return f"friend.{format}", {
+            "sender_id": msg["sender"]["id"],
+            "message": data
+            # "message_id": msg["messageChain"][0]["id"]
         }
     else:
-        return {}
+        return "", {}
 
 def text_message(msg: str) -> Dict[str, str]:
     return {
@@ -89,4 +88,14 @@ def img_message(msg: str) -> Dict[str, str]:
     return {
         "type": "Image",
         "url": msg
+    }
+
+def quote_message(session: str, message_id: str, group_id: str, user_id: str) -> Dict[str, str]:
+    return {
+        "type": "Quote",
+        "id": message_id,
+        "groupId": group_id,
+        "senderId": user_id,
+        "targetId": group_id,
+        "origin": message_from_id(session, message_id, group_id)["messageChain"]
     }
