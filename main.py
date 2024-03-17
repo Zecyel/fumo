@@ -5,19 +5,21 @@ from core.app import App
 # from plugins.stopwatch.stopwatch import stopwatch
 # from plugins.pray.pray import pray
 
-# from plugins.pat.pat import pat
-# from plugins.httpcat.httpcat import httpcat
-# from plugins.httpdog.httpdog import httpdog
-# from plugins.mahjong.mahjong import mahjong
-# from plugins.answer.answer import answer
-# from plugins.guess_npc.guess_npc import guess_npc
-# from plugins.tingpai.tingpai import tingpai
-# from plugins.coin.coin import coin
-# from plugins.repeat.repeat import repeat
-# from plugins.score.score import score
-# from plugins.essence.essence import essence
-# from plugins.nudge.nudge import nudge
+from plugins.pat.pat import pat
+from plugins.httpcat.httpcat import httpcat
+from plugins.httpdog.httpdog import httpdog
+from plugins.mahjong.mahjong import mahjong
+from plugins.answer.answer import answer
+from plugins.guess_npc.guess_npc import guess_npc
+from plugins.tingpai.tingpai import tingpai
+from plugins.coin.coin import coin
+from plugins.repeat.repeat import repeat
+from plugins.score.score import score
+from plugins.essence.essence import essence
+from plugins.nudge.nudge import nudge
 from plugins.chatgpt.chatgpt import chatgpt
+
+from plugins.image.image import image
 
 bot = App()
 
@@ -26,18 +28,20 @@ bot = App()
 # bot.register_plugin(stopwatch)
 # bot.register_plugin(pray)
 
-# bot.register_plugin(pat)
-# bot.register_plugin(httpcat)
-# bot.register_plugin(httpdog)
-# bot.register_plugin(mahjong)
-# bot.register_plugin(answer)
-# bot.register_plugin(guess_npc)
-# bot.register_plugin(tingpai)
-# bot.register_plugin(coin)
-# bot.register_plugin(repeat)
-# bot.register_plugin(score)
-# bot.register_plugin(essence)
-# bot.register_plugin(nudge)
+bot.register_plugin(pat)
+bot.register_plugin(httpcat)
+bot.register_plugin(httpdog)
+bot.register_plugin(mahjong)
+bot.register_plugin(answer)
+bot.register_plugin(guess_npc)
+bot.register_plugin(tingpai)
+bot.register_plugin(coin)
+bot.register_plugin(repeat)
+bot.register_plugin(score)
+bot.register_plugin(essence)
+bot.register_plugin(nudge)
 bot.register_plugin(chatgpt)
+
+bot.register_plugin(image)
 
 bot.run()

@@ -1,6 +1,8 @@
 from typing import Dict, List, Union
 from config import QQ
 from sdk.history import message_from_id
+from sdk.image import save_image
+from PIL import Image
 
 mapper = {
     "Source": "DUMMY",
@@ -84,7 +86,7 @@ def text_message(msg: str) -> Dict[str, str]:
         "text": msg
     }
 
-def img_message(msg: str) -> Dict[str, str]:
+def web_image_message(msg: str) -> Dict[str, str]:
     return {
         "type": "Image",
         "url": msg
@@ -99,3 +101,12 @@ def quote_message(session: str, message_id: str, group_id: str, user_id: str) ->
         "targetId": group_id,
         "origin": message_from_id(session, message_id, group_id)["messageChain"]
     }
+
+def local_image_message(path: str) -> Dict[str, str]:
+    return {
+        "type": "Image",
+        "path": path
+    }
+
+def instant_image_message(img: Image) -> Dict[str, str]:
+    return local_image_message(save_image(img))
