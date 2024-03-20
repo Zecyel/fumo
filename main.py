@@ -20,6 +20,7 @@ from plugins.nudge.nudge import nudge
 from plugins.chatgpt.chatgpt import chatgpt
 
 from plugins.image.image import image
+from plugins.genshin.genshin import genshin
 
 bot = App()
 
@@ -43,5 +44,6 @@ bot.register_plugin(nudge)
 bot.register_plugin(chatgpt)
 
 bot.register_plugin(image)
+bot.register_plugin(genshin)
 
 bot.run()

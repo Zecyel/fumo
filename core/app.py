@@ -53,7 +53,7 @@ class App:
         while True:
             try:
                 msg = await recv_message(self.session)
-                app_logger["info"](f"Get Message: {msg}")
+                # app_logger["info"](f"Get Message: {msg}")
                 msg_type, kwargs = convert_message(msg)
                 
                 if msg_type == "":

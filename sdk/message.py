@@ -108,5 +108,11 @@ def local_image_message(path: str) -> Dict[str, str]:
         "path": path
     }
 
+def local_voice_message(path: str) -> Dict[str, str]:
+    return {
+        "type": "Voice",
+        "path": path
+    }
+
 def instant_image_message(img: Image) -> Dict[str, str]:
     return local_image_message(save_image(img))
