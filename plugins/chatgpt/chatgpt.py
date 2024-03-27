@@ -5,6 +5,7 @@ from sdk.chatgpt import ask, plain_msg
 from sdk.history import message_from_id
 from sdk.message import convert_message
 from sdk.temp_data import fetch, alloc, dump
+import time
 
 async def long_dialog_handler(session: str, group_id: int, sender_id: int, message):
 
@@ -16,15 +17,23 @@ async def long_dialog_handler(session: str, group_id: int, sender_id: int, messa
         return
 
     data = fetch(key)
+
+    if data != None and time.time() - data['time'] > 7200: # 2 hr
+        dump(key)
+        data = None
+
     if data == None:
         alloc(key, {
             "history": [{
                 "role": "system",
                 "content": "You are a helpful assistant."
             }],
+            "time": time.time()
         })
         data = fetch(key)
-    
+
+    data["time"] = time.time()
+
     data["history"].append({
         "role": "user",
         "content": message[2]

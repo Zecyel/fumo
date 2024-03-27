@@ -2,6 +2,8 @@ import sdk.api as api
 from PIL import Image
 from threading import Lock
 from config import DIR_PATH
+import requests
+import io
 
 roll = 0
 roll_lock = Lock()
@@ -17,4 +19,8 @@ def save_image(img: Image) -> str:
     filename = f"{DIR_PATH}/temp/image_{cur}.png"
     img.save(filename)
     return filename
+
+def download_image(url: str) -> Image:
+    resp = requests.get(url)
+    return Image.open(io.BytesIO(resp.content))
 
