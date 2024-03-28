@@ -23,6 +23,7 @@ from plugins.image.image import image
 from plugins.genshin.genshin import genshin
 from plugins.choosing_helper.choosing_helper import choosing_helper
 from plugins.rua.rua import rua
+from plugins.playmaze.playmaze import playmaze
 
 bot = App()
 
@@ -49,5 +50,6 @@ bot.register_plugin(image)
 bot.register_plugin(genshin)
 bot.register_plugin(choosing_helper)
 bot.register_plugin(rua)
+bot.register_plugin(playmaze)
 
 bot.run()
