@@ -69,7 +69,9 @@ async def handler(session: str, group_id: int, sender_id: int, message):
         dump(key)
         return
     
-    if message[0] == to_message(data['answer']):
+    message = "".join(sorted(list(message[0])))
+
+    if message == to_message(data['answer']):
         await send_group_message(session, group_id, text_message(f"答对咯，答案是 {to_message(data['answer'])}！"))
         dump(key)
         return

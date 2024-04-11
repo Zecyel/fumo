@@ -7,14 +7,10 @@ from sdk.message import convert_message
 from sdk.temp_data import fetch, alloc, dump
 import time
 
-async def long_dialog_handler(session: str, group_id: int, sender_id: int, message):
-
-    key = f"chatgpt_{group_id}_{sender_id}"
-
-    if message[2] == "结束对话":
+def dialog(key: str, message: str) -> str:
+    if message == "结束对话":
         dump(key)
-        await send_group_message(session, group_id, text_message("对话结束"))
-        return
+        return "对话结束"
 
     data = fetch(key)
 
@@ -36,7 +32,7 @@ async def long_dialog_handler(session: str, group_id: int, sender_id: int, messa
 
     data["history"].append({
         "role": "user",
-        "content": message[2]
+        "content": message
     })
 
     resp = ask(data["history"])
@@ -46,7 +42,20 @@ async def long_dialog_handler(session: str, group_id: int, sender_id: int, messa
         "content": resp
     })
 
+    return resp
+
+
+async def group_message_handler(session: str, group_id: int, sender_id: int, message):
+    key = f"chatgpt_{group_id}_{sender_id}"
+    resp = dialog(key, message[2])
     await send_group_message(session, group_id, text_message(resp))
 
+async def friend_message_handler(session: str, sender_id: int, message):
+    key = f"chatgpt_{sender_id}"
+    resp = dialog(key, message[0])
+    await send_friend_message(session, sender_id, text_message(resp))
+
 chatgpt = Plugin('chatgpt')
-chatgpt.register_callback('group.@fumo@fumoP', long_dialog_handler)
+chatgpt.register_callback('group.@fumo@fumoP', group_message_handler)
+
+chatgpt.register_callback('friend.P', friend_message_handler)

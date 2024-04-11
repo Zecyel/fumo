@@ -26,4 +26,4 @@ def checker2(sender_id: int, message):
 pat = Plugin('pat')
 pat.register_callback('group.@fumoP', handler, checker)
 
-pat.register_callback('friend.P', handler2, checker2)
+# pat.register_callback('friend.P', handler2, checker2)
