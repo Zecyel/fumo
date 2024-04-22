@@ -11,7 +11,7 @@ def alloc(key: str, value: object):
 class Delegate:
 
     def __init__(self, key: str, obj: object):
-        print(f"{key} {object}")
+        # print(f"{key} {object}")
         self.key = key
         self.obj = obj
 
@@ -19,7 +19,7 @@ class Delegate:
         return self.obj[key]
 
     def set(self, key: str, value: object):
-        print(f"debug: setattr {key} {value}")
+        # print(f"debug: setattr {key} {value}")
         # self.obj[key] = value
         self.obj[key] = value
     

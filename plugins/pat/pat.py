@@ -5,7 +5,7 @@ import random
 
 privileged_user = [2530469979, 158291705]
 async def handler(session: str, group_id: int, sender_id: int, message):
-    if random.random() > 0.8:
+    if random.random() > 0.6666:
         await send_group_message(session, group_id, text_message("( *・ω・)✄╰ひ╯"))
         return
 

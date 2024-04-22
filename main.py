@@ -24,6 +24,8 @@ from plugins.genshin.genshin import genshin
 from plugins.choosing_helper.choosing_helper import choosing_helper
 from plugins.rua.rua import rua
 from plugins.playmaze.playmaze import playmaze
+from plugins.aidraw.aidraw import aidraw
+from plugins.setu.setu import setu
 
 bot = App()
 
@@ -40,7 +42,7 @@ bot.register_plugin(answer)
 bot.register_plugin(guess_npc)
 bot.register_plugin(tingpai)
 bot.register_plugin(coin)
-bot.register_plugin(repeat)
+# bot.register_plugin(repeat)
 bot.register_plugin(score)
 bot.register_plugin(essence)
 bot.register_plugin(nudge)
@@ -51,5 +53,8 @@ bot.register_plugin(genshin)
 bot.register_plugin(choosing_helper)
 bot.register_plugin(rua)
 bot.register_plugin(playmaze)
+
+bot.register_plugin(aidraw)
+bot.register_plugin(setu)
 
 bot.run()

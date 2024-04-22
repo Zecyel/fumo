@@ -2,6 +2,7 @@ import sdk.api as api
 import time
 import asyncio
 from sdk.temp_data import fetch, dump
+from config import QQ
 
 last_send = time.time()
 
@@ -27,6 +28,8 @@ async def send_group_message(session: str, group_id: int, *message_chain):
     })
 
 async def send_friend_message(session: str, user_id: int, *message_chain):
+    if user_id == QQ:
+        return
     await time_block()
     api.post('/sendFriendMessage', {
         "sessionKey": session,
